@@ -1,318 +1,580 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Discover the magic of New York with our immersive travel experience. Plan your perfect trip to the Big Apple with expert recommendations, interactive maps, and real-time information.">
-    <title>New York Explorer | Your Ultimate Guide to the Big Apple</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="static/css/newyork.css">
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src="https://i.postimg.cc/L4LfTbKB/new-york.jpg" alt="Rome Explorer Logo" class="me-2 rounded-circle" width="40" height="40">
-                <span class="fw-bold text-primary">New York</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#destinations">
-                            <i class="fas fa-map-marker-alt me-1"></i> Destinations
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#activities">
-                            <i class="fas fa-hiking me-1"></i> Activities
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#map-section">
-                            <i class="fas fa-map me-1"></i> Explore
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contact">
-                            <i class="fas fa-envelope me-1"></i> Contact
-                        </a>
-                    </li>
-                </ul>
-                <form class="d-flex ms-3">
-                    <div class="input-group">
-                        <input class="form-control" type="search" placeholder="Search New York..." aria-label="Search">
-                        <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </nav>
 
-    <section class="hero">
-        <div class="video-container">
-          <video autoplay loop muted>
-            <source src="static/videos/newyork.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Discover New York City like never before. Expert-curated landmarks, immersive experiences, and real-time exploration tools for the ultimate Big Apple journey." />
+    <title>New York Explorer — Discover the City That Never Sleeps</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="/static/css/newyork.css" />
+</head>
+
+<body>
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header role="banner">
+        <nav class="nav" id="mainNav" aria-label="Main navigation">
+            <div class="nav__inner">
+                <a href="#" class="nav__logo" aria-label="New York Explorer Home">
+                    <img src="https://i.postimg.cc/L4LfTbKB/new-york.jpg" alt="New York City" class="nav__logo-img" />
+                    <span class="nav__logo-text">NY EXPLORER</span>
+                </a>
+                <ul class="nav__links" role="list">
+                    <li><a href="#destinations" class="nav__link">Landmarks</a></li>
+                    <li><a href="#activities" class="nav__link">Activities</a></li>
+                    <li><a href="#map-section" class="nav__link">Explore</a></li>
+                    <li><a href="#weather" class="nav__link">Weather</a></li>
+                    <li><a href="#contact" class="nav__link">Contact</a></li>
+                </ul>
+                <div class="nav__cta">
+                    <a href="#destinations" class="nav__pill">Plan Your Trip</a>
+                </div>
+                <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="mobileNav"
+                    aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+        <div class="nav__mobile" id="mobileNav" role="navigation" aria-label="Mobile navigation">
+            <ul class="nav__mobile-links" role="list">
+                <li><a href="#destinations" class="nav__mobile-link">Landmarks</a></li>
+                <li><a href="#activities" class="nav__mobile-link">Activities</a></li>
+                <li><a href="#map-section" class="nav__mobile-link">Explore</a></li>
+                <li><a href="#weather" class="nav__mobile-link">Weather</a></li>
+                <li><a href="#contact" class="nav__mobile-link">Contact</a></li>
+            </ul>
+            <a href="#destinations" class="btn btn--primary" style="width:100%; justify-content:center;">
+                Plan Your Trip
+                <i class="fas fa-arrow-right" aria-hidden="true"></i>
+            </a>
         </div>
-        <div class="overlay"></div>
-        <div class="hero-content">
-          <h1 class="hero-title" data-aos="fade-up">Unveil the Urban Tapestry</h1>
-          <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">Navigate the concrete jungle's hidden gems</p>
-          <a href="#explore" class="btn btn-custom btn-lg" data-aos="fade-up" data-aos-delay="400">Start Exploring</a>
+    </header>
+
+    <section class="hero" aria-label="Hero New York City">
+        <div class="hero__video-wrap">
+            <video autoplay loop muted playsinline poster="https://i.postimg.cc/L4LfTbKB/new-york.jpg"
+                aria-hidden="true" id="heroVideo">
+                <source src="static/videos/newyork.mp4" type="video/mp4" />
+            </video>
+        </div>
+        <div class="hero__overlay" aria-hidden="true"></div>
+        <div class="hero__grain" aria-hidden="true"></div>
+
+        <div class="hero__badge">
+            <span class="hero__badge-dot"></span>
+            <span class="hero__badge-text">New York City &nbsp;·&nbsp; <span id="liveTime">—</span></span>
+        </div>
+
+        <div class="hero__content">
+            <h1 class="hero__title">
+                <span class="hero__title-line1">NEW</span>
+                <span class="hero__title-line2">YORK</span>
+            </h1>
+            <div class="hero__row">
+                <p class="hero__desc">
+                    Eight million stories in a city that never pauses. From the harbor to Central Park — discover the
+                    iconic, the hidden, and everything between.
+                </p>
+                <div class="hero__ctas">
+                    <a href="#destinations" class="btn btn--primary-hero">Start Exploring</a>
+                    <a href="#map-section" class="btn btn--outline-hero">View Map</a>
+                </div>
+            </div>
         </div>
     </section>
 
-    <main>
-        <section id="destinations" class="py-5">
+    <main id="main-content">
+
+        <section id="destinations" class="section">
             <div class="container">
-                <h2 class="text-center section-title" data-aos="fade-up">Iconic Landmarks</h2>
-                <div class="row">
-                    <div class="col-lg-8" data-aos="fade-right">
-                        <div id="landmarkCarousel" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-indicators">
-                                <button type="button" data-bs-target="#landmarkCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Statue of Liberty"></button>
-                                <button type="button" data-bs-target="#landmarkCarousel" data-bs-slide-to="1" aria-label="Empire State Building"></button>
-                                <button type="button" data-bs-target="#landmarkCarousel" data-bs-slide-to="2" aria-label="Central Park"></button>
-                            </div>
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <img src="https://i.postimg.cc/0jDpKtxn/Statue-of-Liberty.jpgs" class="d-block w-100" alt="Statue of Liberty">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h5>Statue of Liberty</h5>
-                                        <p>Symbol of freedom and democracy</p>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <img src="https://i.postimg.cc/MZC5ZBxt/Empire-State-Building.jpg" class="d-block w-100" alt="Empire State Building">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h5>Empire State Building</h5>
-                                        <p>Iconic skyscraper with panoramic views</p>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <img src="https://i.postimg.cc/65mrPNPg/Central-Park.jpg" class="d-block w-100" alt="Central Park">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h5>Central Park</h5>
-                                        <p>Urban oasis in the heart of Manhattan</p>
-                                    </div>
+                <div class="section__header fade-up">
+                    <span class="section__eyebrow">Iconic Landmarks</span>
+                    <h2 class="section__title display-serif">Where History<br />Meets Skyline</h2>
+                    <p class="section__desc">From Liberty's torch to Central Park's canopy — explore the defining
+                        monuments of the greatest city on Earth.</p>
+                </div>
+                <div class="destinations">
+                    <div class="carousel fade-up" role="region" aria-label="Landmark slideshow"
+                        aria-roledescription="carousel">
+                        <div class="carousel__track" id="carouselTrack">
+                            <div class="carousel__slide" role="group" aria-roledescription="slide"
+                                aria-label="1 of 3: Statue of Liberty">
+                                <img src="https://images.unsplash.com/photo-1485738422979-f5c462d49f74?w=1200&q=80"
+                                    alt="Statue of Liberty standing tall in New York Harbor" loading="eager" />
+                                <div class="carousel__caption">
+                                    <p class="carousel__caption-label">Liberty Island</p>
+                                    <h3>Statue of Liberty</h3>
+                                    <p>Symbol of freedom and democracy since 1886</p>
                                 </div>
                             </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#landmarkCarousel" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
+                            <div class="carousel__slide" role="group" aria-roledescription="slide"
+                                aria-label="2 of 3: Empire State Building">
+                                <img src="https://images.unsplash.com/photo-1555109307-f7d9da25c244?w=1200&q=80"
+                                    alt="Empire State Building soaring above Midtown Manhattan" loading="lazy" />
+                                <div class="carousel__caption">
+                                    <p class="carousel__caption-label">Midtown Manhattan</p>
+                                    <h3>Empire State Building</h3>
+                                    <p>Iconic skyscraper with 360° panoramic views</p>
+                                </div>
+                            </div>
+                            <div class="carousel__slide" role="group" aria-roledescription="slide"
+                                aria-label="3 of 3: Central Park">
+                                <img src="https://images.unsplash.com/photo-1534430480872-3498386e7856?w=1200&q=80"
+                                    alt="Aerial view of Central Park surrounded by Manhattan skyscrapers"
+                                    loading="lazy" />
+                                <div class="carousel__caption">
+                                    <p class="carousel__caption-label">Upper Manhattan</p>
+                                    <h3>Central Park</h3>
+                                    <p>843 acres of urban oasis in the heart of Manhattan</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel__dots" role="tablist" aria-label="Carousel slides">
+                            <button class="carousel__dot active" role="tab" aria-selected="true" aria-label="Slide 1"
+                                data-slide="0"></button>
+                            <button class="carousel__dot" role="tab" aria-selected="false" aria-label="Slide 2"
+                                data-slide="1"></button>
+                            <button class="carousel__dot" role="tab" aria-selected="false" aria-label="Slide 3"
+                                data-slide="2"></button>
+                        </div>
+                        <div class="carousel__controls">
+                            <button class="carousel__btn" id="carouselPrev" aria-label="Previous slide">
+                                <i class="fas fa-arrow-left" aria-hidden="true"></i>
                             </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#landmarkCarousel" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
+                            <button class="carousel__btn" id="carouselNext" aria-label="Next slide">
+                                <i class="fas fa-arrow-right" aria-hidden="true"></i>
                             </button>
                         </div>
                     </div>
-                    <div class="col-lg-4" data-aos="fade-left">
-                        <div class="landmark-info card">
-                            <div class="card-body">
-                                <h3 id="landmarkTitle" class="card-title">Statue of Liberty</h3>
-                                <p id="landmarkDescription" class="card-text">The Statue of Liberty, a colossal neoclassical sculpture on Liberty Island in New York Harbor, was a gift from the people of France to the United States. Dedicated on October 28, 1886, it has become an icon of freedom and of the United States.</p>
-                                <ul id="landmarkFacts" class="list-group list-group-flush">
-                                    <li class="list-group-item"><i class="fas fa-info-circle me-2"></i>Height: 151 feet (46 meters)</li>
-                                    <li class="list-group-item"><i class="fas fa-calendar-alt me-2"></i>Dedicated: October 28, 1886</li>
-                                    <li class="list-group-item"><i class="fas fa-users me-2"></i>Annual Visitors: 4.5 million</li>
-                                </ul>
-                                <button class="btn btn-custom mt-3" onclick="bookTour()">Book a Tour</button>
+                    <aside class="landmark-card fade-up fade-up-delay-2" aria-label="Landmark details"
+                        id="landmarkPanel">
+                        <div class="landmark-card__header">
+                            <div class="landmark-card__badge">
+                                <i class="fas fa-star" aria-hidden="true"></i>
+                                Must-See Landmark
+                            </div>
+                            <h3 class="landmark-card__title" id="landmarkTitle">Statue of Liberty</h3>
+                            <p class="landmark-card__desc" id="landmarkDesc">A colossal neoclassical sculpture on
+                                Liberty Island — a gift from France dedicated on October 28, 1886. Now an enduring
+                                global symbol of freedom and the American dream.</p>
+                        </div>
+                        <div class="landmark-card__body">
+                            <ul class="landmark-card__facts" id="landmarkFacts">
+                                <li class="landmark-fact">
+                                    <div class="landmark-fact__icon"><i class="fas fa-ruler-vertical"
+                                            aria-hidden="true"></i></div>
+                                    <div>
+                                        <p class="landmark-fact__label">Height</p>
+                                        <p class="landmark-fact__value">151 ft (46 m)</p>
+                                    </div>
+                                </li>
+                                <li class="landmark-fact">
+                                    <div class="landmark-fact__icon"><i class="fas fa-calendar-alt"
+                                            aria-hidden="true"></i></div>
+                                    <div>
+                                        <p class="landmark-fact__label">Dedicated</p>
+                                        <p class="landmark-fact__value">October 28, 1886</p>
+                                    </div>
+                                </li>
+                                <li class="landmark-fact">
+                                    <div class="landmark-fact__icon"><i class="fas fa-users" aria-hidden="true"></i>
+                                    </div>
+                                    <div>
+                                        <p class="landmark-fact__label">Annual Visitors</p>
+                                        <p class="landmark-fact__value">4.5 Million</p>
+                                    </div>
+                                </li>
+                            </ul>
+                            <button class="btn btn--primary" style="width:100%;" id="landmarkBookBtn"
+                                onclick="openModal('liberty')">
+                                <i class="fas fa-ticket-alt" aria-hidden="true"></i>
+                                Book a Tour
+                            </button>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
+        <section id="activities" class="section section--alt">
+            <div class="container">
+                <div class="section__header section__header--center fade-up">
+                    <span class="section__eyebrow">Experiences</span>
+                    <h2 class="section__title display-serif">Popular Activities</h2>
+                    <p class="section__desc">Handpicked experiences curated by NYC locals — from underground food tours
+                        to rooftop Broadway nights.</p>
+                </div>
+                <div class="activities-grid">
+                    <article class="activity-card fade-up" aria-label="Food Tours activity">
+                        <div class="activity-card__icon-wrap activity-card__icon-wrap--gold">
+                            <i class="fas fa-utensils" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <p class="activity-card__tag">Culinary</p>
+                            <h3 class="activity-card__title">Food Tours</h3>
+                            <p class="activity-card__desc">Taste the world in one city. From Chinatown dumplings to
+                                Harlem soul food — let your palate lead the way.</p>
+                        </div>
+                        <div class="activity-card__footer">
+                            <div class="activity-card__price">
+                                <span class="activity-card__price-from">From</span>
+                                <span class="activity-card__price-amount">$89</span>
+                            </div>
+                            <button class="btn btn--outline btn--sm"
+                                onclick="showToast('Food Tour booked! Check your email.')">
+                                Book Now <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </article>
+                    <article class="activity-card fade-up fade-up-delay-1" aria-label="Broadway Shows activity">
+                        <div class="activity-card__icon-wrap activity-card__icon-wrap--blue">
+                            <i class="fas fa-theater-masks" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <p class="activity-card__tag">Entertainment</p>
+                            <h3 class="activity-card__title">Broadway Shows</h3>
+                            <p class="activity-card__desc">Experience the pinnacle of live theatre. Premium seats,
+                                instant confirmation, and unforgettable performances.</p>
+                        </div>
+                        <div class="activity-card__footer">
+                            <div class="activity-card__price">
+                                <span class="activity-card__price-from">From</span>
+                                <span class="activity-card__price-amount">$149</span>
+                            </div>
+                            <button class="btn btn--outline btn--sm" onclick="showToast('Broadway tickets reserved!')">
+                                Book Now <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </article>
+                    <article class="activity-card fade-up fade-up-delay-2" aria-label="City Bike Tours activity">
+                        <div class="activity-card__icon-wrap activity-card__icon-wrap--emerald">
+                            <i class="fas fa-bicycle" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <p class="activity-card__tag">Adventure</p>
+                            <h3 class="activity-card__title">City Bike Tours</h3>
+                            <p class="activity-card__desc">Pedal through Central Park, the Brooklyn Bridge, and Hudson
+                                River Greenway with expert local guides.</p>
+                        </div>
+                        <div class="activity-card__footer">
+                            <div class="activity-card__price">
+                                <span class="activity-card__price-from">From</span>
+                                <span class="activity-card__price-amount">$49</span>
+                            </div>
+                            <button class="btn btn--outline btn--sm" onclick="showToast('Bike tour confirmed!')">
+                                Book Now <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </article>
+                    <article class="activity-card fade-up fade-up-delay-3" aria-label="Helicopter Tours activity">
+                        <div class="activity-card__icon-wrap activity-card__icon-wrap--rose">
+                            <i class="fas fa-helicopter" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <p class="activity-card__tag">Luxury</p>
+                            <h3 class="activity-card__title">Helicopter Tours</h3>
+                            <p class="activity-card__desc">Soar above the skyline at sunset. The most breathtaking
+                                perspective on the city that never sleeps.</p>
+                        </div>
+                        <div class="activity-card__footer">
+                            <div class="activity-card__price">
+                                <span class="activity-card__price-from">From</span>
+                                <span class="activity-card__price-amount">$299</span>
+                            </div>
+                            <button class="btn btn--outline btn--sm" onclick="showToast('Helicopter tour booked!')">
+                                Book Now <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="map-section" class="section">
+            <div class="container">
+                <div class="section__header fade-up">
+                    <span class="section__eyebrow">Interactive Map</span>
+                    <h2 class="section__title display-serif">Explore New York</h2>
+                    <p class="section__desc">Navigate the city's iconic destinations. Click any marker to discover more
+                        about each location.</p>
+                </div>
+                <div class="map-section__grid">
+                    <div class="map-wrapper fade-up">
+                        <div id="map" aria-label="Interactive map of New York City"></div>
+                    </div>
+                    <aside class="map-sidebar fade-up fade-up-delay-1" aria-label="Popular destinations list">
+                        <div class="map-sidebar__header">
+                            <p class="map-sidebar__title">Popular Destinations</p>
+                        </div>
+                        <ul class="map-sidebar__list" id="landmarkList" role="list"></ul>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
+        <section id="weather" class="section section--alt">
+            <div class="container">
+                <div class="section__header section__header--center fade-up">
+                    <span class="section__eyebrow">Live Conditions</span>
+                    <h2 class="section__title display-serif">New York Weather</h2>
+                    <p class="section__desc">Real-time conditions to help you pack smart and plan ahead.</p>
+                </div>
+                <div class="weather-widget fade-up" id="weatherWidget" role="region"
+                    aria-label="Current weather in New York"></div>
+            </div>
+        </section>
+
+        <section id="statistics" class="section">
+            <div class="container">
+                <div class="section__header section__header--center fade-up">
+                    <span class="section__eyebrow">By the Numbers</span>
+                    <h2 class="section__title display-serif">Visitor Statistics</h2>
+                    <p class="section__desc">The data behind the world's most visited urban destination.</p>
+                </div>
+                <div class="stats-grid fade-up">
+                    <div class="stat-card">
+                        <div class="stat-card__num" data-count="66" data-suffix="M+">0M+</div>
+                        <div class="stat-card__label">Annual visitors</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card__num" data-count="27" data-suffix="K+">0K+</div>
+                        <div class="stat-card__label">Restaurants</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card__num" data-count="500" data-suffix="+">0+</div>
+                        <div class="stat-card__label">Art galleries</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card__num" data-count="578" data-suffix="">0</div>
+                        <div class="stat-card__label">Miles of waterfront</div>
+                    </div>
+                </div>
+                <div class="chart-wrapper fade-up">
+                    <div class="chart-header">
+                        <div>
+                            <p class="section__eyebrow" style="margin-bottom: var(--space-2);">Monthly Trends</p>
+                            <p class="chart-heading">Visitor Arrivals 2024</p>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="chart-legend-item">
+                                <div class="chart-legend-dot" style="background: var(--accent-gold);"></div>
+                                <span>International</span>
+                            </div>
+                            <div class="chart-legend-item">
+                                <div class="chart-legend-dot" style="background: var(--accent-blue);"></div>
+                                <span>Domestic</span>
                             </div>
                         </div>
                     </div>
+                    <canvas id="visitorStats" aria-label="Visitor statistics chart" role="img"></canvas>
                 </div>
             </div>
         </section>
 
-        <section id="activities" class="py-5 bg-light">
+        <section id="contact" class="section section--alt">
             <div class="container">
-                <h2 class="text-center section-title" data-aos="fade-up">Popular Activities</h2>
-                <div class="activity-grid">
-                    <div class="activity-card" data-aos="fade-up">
-                        <i class="fas fa-utensils activity-icon"></i>
-                        <h5>Food Tours</h5>
-                        <p>Taste the diverse flavors of NYC</p>
-                        <button class="btn btn-custom">Book Now</button>
-                    </div>
-                    <div class="activity-card" data-aos="fade-up" data-aos-delay="200">
-                        <i class="fas fa-ticket-alt activity-icon"></i>
-                        <h5>Broadway Shows</h5>
-                        <p>Experience world-class theater</p>
-                        <button class="btn btn-custom">Book Now</button>
-                    </div>
-                    <div class="activity-card" data-aos="fade-up" data-aos-delay="400">
-                        <i class="fas fa-bicycle activity-icon"></i>
-                        <h5>City Bike Tours</h5>
-                        <p>Explore NYC on two wheels</p>
-                        <button class="btn btn-custom">Book Now</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="map-section" class="py-5">
-            <div class="container">
-                <h2 class="text-center section-title" data-aos="fade-up">Explore New York</h2>
-                <div class="row">
-                    <div class="col-lg-8" data-aos="fade-right">
-                        <div id="map"></div>
-                    </div>
-                    <div class="col-lg-4" data-aos="fade-left">
-                        <div class="landmark-info card">
-                            <div class="card-body">
-                                <h5 class="card-title">Popular Destinations</h5>
-                                <ul id="landmarkList" class="list-group list-group-flush">
-                                    <!-- Landmarks will be dynamically added here -->
-                                </ul>
+                <div class="contact-grid">
+                    <div class="contact-info fade-up">
+                        <div>
+                            <span class="section__eyebrow">Get in Touch</span>
+                            <h2 class="contact-info__title display-serif">Let's Plan Your<br />Perfect Trip</h2>
+                        </div>
+                        <p class="contact-info__desc">Our New York specialists are on hand to craft a bespoke itinerary,
+                            answer questions, or help you discover hidden gems only locals know about.</p>
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <div class="contact-method__icon"><i class="fas fa-envelope" aria-hidden="true"></i>
+                                </div>
+                                <div>
+                                    <p class="contact-method__label">Email us</p>
+                                    <p class="contact-method__value">hello@nyexplorer.com</p>
+                                </div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="contact-method__icon"><i class="fas fa-phone" aria-hidden="true"></i></div>
+                                <div>
+                                    <p class="contact-method__label">Call us</p>
+                                    <p class="contact-method__value">+1 (212) 555-0147</p>
+                                </div>
+                            </div>
+                            <div class="contact-method">
+                                <div class="contact-method__icon"><i class="fas fa-map-marker-alt"
+                                        aria-hidden="true"></i></div>
+                                <div>
+                                    <p class="contact-method__label">Visit us</p>
+                                    <p class="contact-method__value">30 Rockefeller Plaza, New York</p>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <form class="contact-form fade-up fade-up-delay-1" id="contactForm" novalidate
+                        aria-label="Contact form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" id="firstName" name="firstName" class="form-control"
+                                    placeholder="Jane" required autocomplete="given-name" />
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" class="form-control"
+                                    placeholder="Smith" required autocomplete="family-name" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" id="email" name="email" class="form-control"
+                                placeholder="jane@example.com" required autocomplete="email" />
+                        </div>
+                        <div class="form-group">
+                            <label for="tripType" class="form-label">Trip Type</label>
+                            <select id="tripType" name="tripType" class="form-control">
+                                <option value="">Select an experience...</option>
+                                <option value="cultural">Cultural Tour</option>
+                                <option value="food">Food & Dining</option>
+                                <option value="adventure">Adventure & Outdoors</option>
+                                <option value="luxury">Luxury Experience</option>
+                                <option value="family">Family Package</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message" class="form-label">Your Message</label>
+                            <textarea id="message" name="message" class="form-control"
+                                placeholder="Tell us about your dream trip to New York..." required rows="5"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--lg" style="width:100%;">
+                            Send Message
+                            <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </section>
 
-        <section id="weather" class="py-5 bg-light">
-            <div class="container">
-                <h2 class="text-center section-title" data-aos="fade-up">New York Weather</h2>
-                <div id="weather-widget" class="text-center" data-aos="fade-up">
-                    <!-- Weather information will be dynamically added here -->
-                </div>
-            </div>
-        </section>
-
-        <section id="statistics" class="py-5">
-            <div class="container">
-                <h2 class="text-center section-title" data-aos="fade-up">Visitor Statistics</h2>
-                <div class="row">
-                    <div class="col-lg-8 mx-auto">
-                        <canvas id="visitorStats" data-aos="fade-up"></canvas>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="py-5 bg-light">
-            <div class="container">
-                <h2 class="text-center section-title" data-aos="fade-up">Contact Us</h2>
-                <div class="row justify-content-center">
-                    <div class="col-md-8">
-                        <form data-aos="fade-up">
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="name" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="message" class="form-label">Message</label>
-                                <textarea class="form-control" id="message" rows="5" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-custom">Send Message</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
-    <footer class="bg-dark text-light py-5">
+    <footer class="footer" role="contentinfo">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <h5 class="mb-3">About New York Explorer</h5>
-                    <p>We're passionate about helping you discover the magic of New York City. Our expert guides and curated experiences ensure an unforgettable journey through the Big Apple.</p>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <h5 class="mb-3">Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-light text-decoration-none">Home</a></li>
-                        <li><a href="#destinations" class="text-light text-decoration-none">Destinations</a></li>
-                        <li><a href="#activities" class="text-light text-decoration-none">Activities</a></li>
-                        <li><a href="#map-section" class="text-light text-decoration-none">Explore</a></li>
-                        <li><a href="#contact" class="text-light text-decoration-none">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <h5 class="mb-3">Stay Connected</h5>
-                    <p>Subscribe to our newsletter for the latest updates and exclusive offers.</p>
-                    <form>
-                        <div class="input-group mb-3">
-                            <input type="email" class="form-control" placeholder="Your email" aria-label="Your email" aria-describedby="button-addon2">
-                            <button class="btn btn-custom" type="button" id="button-addon2">Subscribe</button>
-                        </div>
-                    </form>
-                    <div class="social-icons mt-3">
-                        <a href="#" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-light me-3"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-light me-3"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="text-light"><i class="fab fa-youtube"></i></a>
+            <div class="footer__grid">
+                <div class="footer__brand">
+                    <a href="#" class="nav__logo" aria-label="NY Explorer Home">
+                        <img src="https://i.postimg.cc/L4LfTbKB/new-york.jpg" alt="New York City"
+                            class="nav__logo-img" />
+                        <span class="nav__logo-text">NY EXPLORER</span>
+                    </a>
+                    <p class="footer__brand-desc">Your world-class guide to the greatest city on Earth. Curated
+                        experiences, local expertise, unforgettable memories.</p>
+                    <div class="footer__newsletter" role="form" aria-label="Newsletter subscription">
+                        <input type="email" placeholder="Your email address" aria-label="Email for newsletter" />
+                        <button class="btn btn--primary btn--sm">Subscribe</button>
+                    </div>
+                    <div class="footer__social" aria-label="Social media links">
+                        <a href="#" class="footer__social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"
+                                aria-hidden="true"></i></a>
+                        <a href="#" class="footer__social-btn" aria-label="Twitter"><i class="fab fa-x-twitter"
+                                aria-hidden="true"></i></a>
+                        <a href="#" class="footer__social-btn" aria-label="Instagram"><i class="fab fa-instagram"
+                                aria-hidden="true"></i></a>
+                        <a href="#" class="footer__social-btn" aria-label="YouTube"><i class="fab fa-youtube"
+                                aria-hidden="true"></i></a>
+                        <a href="#" class="footer__social-btn" aria-label="TikTok"><i class="fab fa-tiktok"
+                                aria-hidden="true"></i></a>
                     </div>
                 </div>
+                <div class="footer__col">
+                    <h4>Explore</h4>
+                    <ul class="footer__links" role="list">
+                        <li><a href="#destinations" class="footer__link">Iconic Landmarks</a></li>
+                        <li><a href="#activities" class="footer__link">Activities</a></li>
+                        <li><a href="#map-section" class="footer__link">Interactive Map</a></li>
+                        <li><a href="#weather" class="footer__link">Weather</a></li>
+                        <li><a href="#statistics" class="footer__link">Visitor Stats</a></li>
+                    </ul>
+                </div>
+                <div class="footer__col">
+                    <h4>Plan</h4>
+                    <ul class="footer__links" role="list">
+                        <li><a href="#" class="footer__link">Getting Here</a></li>
+                        <li><a href="#" class="footer__link">Where to Stay</a></li>
+                        <li><a href="#" class="footer__link">Getting Around</a></li>
+                        <li><a href="#" class="footer__link">Best Time to Visit</a></li>
+                        <li><a href="#" class="footer__link">Travel Tips</a></li>
+                    </ul>
+                </div>
+                <div class="footer__col">
+                    <h4>Company</h4>
+                    <ul class="footer__links" role="list">
+                        <li><a href="#" class="footer__link">About Us</a></li>
+                        <li><a href="#contact" class="footer__link">Contact</a></li>
+                        <li><a href="#" class="footer__link">Press</a></li>
+                        <li><a href="#" class="footer__link">Partnerships</a></li>
+                        <li><a href="#" class="footer__link">Careers</a></li>
+                    </ul>
+                </div>
             </div>
-            <hr class="my-4">
-            <div class="row">
-                <div class="col-md-6 text-center text-md-start">
-                    <p>&copy; 2024 New York Explorer. All rights reserved.</p>
-                </div>
-                <div class="col-md-6 text-center text-md-end">
-                    <a href="#" class="text-light text-decoration-none me-3">Privacy Policy</a>
-                    <a href="#" class="text-light text-decoration-none me-3">Terms of Service</a>
-                    <a href="#" class="text-light text-decoration-none">Contact Us</a>
-                </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">&copy; 2024 New York Explorer. All rights reserved.</p>
+                <nav class="footer__legal" aria-label="Legal links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                    <a href="#">Accessibility</a>
+                </nav>
             </div>
         </div>
     </footer>
 
-    <!-- Modals -->
-    <div class="modal fade landmark-modal" id="landmarkModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLandmarkTitle"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-overlay" id="landmarkModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal">
+            <div class="modal__header">
+                <img id="modalImg" src="" alt="" />
+                <div class="modal__header-overlay" aria-hidden="true"></div>
+                <button class="modal__close" onclick="closeModal()" aria-label="Close dialog">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+                <div class="modal__header-content">
+                    <span class="section__eyebrow" id="modalEyebrow"></span>
+                    <h2 class="display-serif" id="modalTitle"
+                        style="font-size: var(--text-3xl); letter-spacing: -0.02em;"></h2>
                 </div>
-                <div class="modal-body">
-                    <img id="modalLandmarkImage" src="" class="img-fluid rounded mb-4" alt="">
-                    <h4 id="modalLandmarkSubtitle" class="mb-3"></h4>
-                    <p id="modalLandmarkDescription"></p>
-                    <div class="row mt-4">
-                        <div class="col-md-6">
-                            <h5 class="mb-3">Quick Facts</h5>
-                            <ul id="modalLandmarkFacts" class="list-unstyled">
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <h5 class="mb-3">Visitor Information</h5>
-                            <ul id="modalLandmarkVisitorInfo" class="list-unstyled">
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-custom">Book Tickets</button>
-                </div>
+            </div>
+            <div class="modal__body">
+                <p id="modalDesc"
+                    style="color: var(--text-secondary); line-height: 1.8; margin-bottom: var(--space-6);"></p>
+                <div class="modal__facts" id="modalFacts"></div>
+            </div>
+            <div class="modal__footer">
+                <button class="btn btn--ghost" onclick="closeModal()">Close</button>
+                <button class="btn btn--primary"
+                    onclick="showToast('Tickets reserved! Check your inbox.'); closeModal();">
+                    <i class="fas fa-ticket-alt" aria-hidden="true"></i>
+                    Book Tickets
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
-    <script src="static/js/newyork.js"></script>
-    </body>
-    </html>
-    
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+        <div class="toast__icon"><i class="fas fa-check" aria-hidden="true"></i></div>
+        <div class="toast__text">
+            <strong>Success</strong>
+            <span id="toastMsg">Action completed.</span>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script src="/static/js/newyork.js"></script>
+</body>
+
+</html>

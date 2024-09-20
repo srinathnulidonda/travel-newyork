@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New York — Hero Section</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #07070C;
+            --s1: #0F0F18;
+            --b1: rgba(255, 255, 255, 0.06);
+            --b2: rgba(255, 255, 255, 0.11);
+            --cream: #F4EFE6;
+            --muted: #55556A;
+            --y: #F7C325;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --fd: 'Bebas Neue', sans-serif;
+            --fb: 'Inter', sans-serif;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            font-family: var(--fb);
+            background: var(--bg);
+            color: var(--cream);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            cursor: none
+        }
+
+        /* CUSTOM CURSOR */
+        #cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 10px;
+            background: var(--y);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.08s, width 0.25s var(--ease), height 0.25s var(--ease), background 0.25s;
+            mix-blend-mode: difference
+        }
+
+        #cursor-ring {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(247, 195, 37, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.18s var(--ease), width 0.35s var(--ease), height 0.35s var(--ease), opacity 0.25s, border-color 0.25s
+        }
+
+        body.hovering #cursor {
+            width: 6px;
+            height: 6px
+        }
+
+        body.hovering #cursor-ring {
+            width: 56px;
+            height: 56px;
+            border-color: rgba(247, 195, 37, 0.7)
+        }
+
+        body.clicking #cursor {
+            transform: translate(-50%, -50%) scale(0.7)
+        }
+
+        @media(pointer:coarse) {
+
+            #cursor,
+            #cursor-ring {
+                display: none
+            }
+
+            body {
+                cursor: auto
+            }
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            height: 68px;
+            padding: 0 52px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.4s var(--ease)
+        }
+
+        nav.scrolled {
+            background: rgba(7, 7, 12, 0.88);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--b1)
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .nav-logo-mark {
+            width: 32px;
+            height: 32px;
+            background: var(--y);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .nav-logo-mark svg {
+            width: 16px;
+            height: 16px;
+            fill: #000
+        }
+
+        .nav-logo-text {
+            font-family: var(--fd);
+            font-size: 20px;
+            letter-spacing: 0.1em;
+            color: var(--cream)
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none
+        }
+
+        .nav-links a {
+            font-size: 12px;
+            font-weight: 500;
+            color: rgba(244, 239, 230, 0.5);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: color 0.2s;
+            position: relative;
+            text-decoration: none
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--y);
+            transition: width 0.3s var(--ease)
+        }
+
+        .nav-links a:hover {
+            color: var(--cream)
+        }
+
+        .nav-links a:hover::after {
+            width: 100%
+        }
+
+        .nav-pill {
+            background: var(--y);
+            color: #000;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            padding: 9px 20px;
+            border-radius: 100px;
+            text-decoration: none;
+            transition: transform 0.2s var(--ease), box-shadow 0.2s
+        }
+
+        .nav-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(247, 195, 37, 0.3)
+        }
+
+        /* HERO */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 700px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1534430480872-3498386e7856?w=1920&q=85') center 30%/cover no-repeat;
+            transform: scale(1.08);
+            will-change: transform
+        }
+
+        .hero-grad {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(7, 7, 12, 0.25) 0%, rgba(7, 7, 12, 0) 25%, rgba(7, 7, 12, 0.5) 65%, rgba(7, 7, 12, 1) 100%)
+        }
+
+        .hero-grain {
+            position: absolute;
+            inset: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size: 200px
+        }
+
+        .hero-badge {
+            position: absolute;
+            top: 100px;
+            left: 52px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(7, 7, 12, 0.5);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--b1);
+            border-radius: 100px;
+            padding: 8px 16px 8px 10px;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.5s var(--ease) forwards
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--y);
+            box-shadow: 0 0 0 0 rgba(247, 195, 37, 0.5);
+            animation: ripple 2s infinite
+        }
+
+        @keyframes ripple {
+            0% {
+                box-shadow: 0 0 0 0 rgba(247, 195, 37, 0.5)
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(247, 195, 37, 0)
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(247, 195, 37, 0)
+            }
+        }
+
+        .badge-text {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.07em;
+            color: rgba(244, 239, 230, 0.65)
+        }
+
+        filter='url(%23n)' /%3E%3C/svg%3E");background-size:200px}
+
+
+        .hero-badge {
+            position: absolute;
+            top: 100px;
+            left: 52px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(7, 7, 12, 0.5);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--b1);
+            border-radius: 100px;
+            padding: 8px 16px 8px 10px;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.5s var(--ease) forwards
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--y);
+            box-shadow: 0 0 0 0 rgba(247, 195, 37, 0.5);
+            animation: ripple 2s infinite
+        }
+
+        @keyframes ripple {
+            0% {
+                box-shadow: 0 0 0 0 rgba(247, 195, 37, 0.5)
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(247, 195, 37, 0)
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(247, 195, 37, 0)
+            }
+        }
+
+        .badge-text {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.07em;
+            color: rgba(244, 239, 230, 0.65)
+        }
+
+        #live-time {
+            color: var(--y);
+            font-weight: 600;
+            font-variant-numeric: tabular-nums
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 52px 80px
+        }
+
+        .hero-eyebrow {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(244, 239, 230, 0.4);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.7s var(--ease) forwards
+        }
+
+        .hero-h1 {
+            font-family: var(--fd);
+            line-height: 0.86;
+            letter-spacing: -0.01em;
+            color: var(--cream);
+            margin-bottom: 0;
+            opacity: 0;
+            animation: fadeUp 0.9s 0.9s var(--ease) forwards
+        }
+
+        .hero-h1 .line1 {
+            font-size: clamp(96px, 15vw, 210px);
+            display: block
+        }
+
+        .hero-h1 .line2 {
+            font-size: clamp(96px, 15vw, 210px);
+            display: block;
+            color: var(--y);
+            -webkit-text-stroke: 0px;
+            text-shadow: none
+        }
+
+        .hero-h1 .line2.outline {
+            -webkit-text-stroke: 2px var(--y);
+            color: transparent
+        }
+
+        .hero-row {
+            margin-top: 40px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 40px;
+            opacity: 0;
+            animation: fadeUp 0.9s 1.15s var(--ease) forwards
+        }
+
+        .hero-desc {
+            max-width: 400px;
+            font-size: 15px;
+            font-weight: 300;
+            color: rgba(244, 239, 230, 0.55);
+            line-height: 1.8
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 12px;
+            flex-shrink: 0
+        }
+
+        .btn-y {
+            background: var(--y);
+            color: #000;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 14px 28px;
+            border-radius: 100px;
+            text-decoration: none;
+            border: none;
+            transition: transform 0.25s var(--ease), box-shadow 0.25s;
+            display: inline-block
+        }
+
+        .btn-y:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(247, 195, 37, 0.35)
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--cream);
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 13px 28px;
+            border-radius: 100px;
+            border: 1px solid var(--b2);
+            text-decoration: none;
+            transition: border-color 0.25s, background 0.25s, transform 0.25s var(--ease);
+            display: inline-block
+        }
+
+        .btn-outline:hover {
+            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-3px)
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 40px;
+            right: 52px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            animation: fadeUp 0.8s 1.4s var(--ease) forwards
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 56px;
+            background: linear-gradient(to bottom, transparent, var(--y));
+            animation: scrollAnim 2s infinite
+        }
+
+        @keyframes scrollAnim {
+            0% {
+                transform: scaleY(0);
+                transform-origin: top
+            }
+
+            50% {
+                transform: scaleY(1);
+                transform-origin: top
+            }
+
+            51% {
+                transform: scaleY(1);
+                transform-origin: bottom
+            }
+
+            100% {
+                transform: scaleY(0);
+                transform-origin: bottom
+            }
+        }
+
+        .scroll-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            writing-mode: vertical-rl
+        }
+
+        /* ── RESPONSIVE ── */
+        .ham {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--b1);
+            border-radius: 8px;
+            align-items: center;
+            justify-content: center;
+            color: var(--cream);
+            font-size: 18px;
+            cursor: pointer;
+            background: none
+        }
+
+        @media(max-width:768px) {
+            nav {
+                padding: 0 24px
+            }
+
+            .nav-links,
+            .nav-pill {
+                display: none
+            }
+
+            .ham {
+                display: flex
+            }
+
+            .hero-content,
+            .hero-badge {
+                padding-left: 24px;
+                padding-right: 24px
+            }
+
+            .hero-badge {
+                left: 24px
+            }
+
+            .hero-h1 .line1,
+            .hero-h1 .line2 {
+                font-size: clamp(64px, 18vw, 110px)
+            }
+
+            .hero-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 24px
+            }
+
+            .hero-scroll {
+                right: 24px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- NAV -->
+    <nav id="nav">
+        <div class="nav-logo">
+            <div class="nav-logo-mark"><svg viewBox="0 0 16 16">
+                    <path d="M8 1L2 14h12L8 1z" />
+                </svg></div>
+            <span class="nav-logo-text">NY EXPLORER</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#landmarks">Landmarks</a></li>
+            <li><a href="#neighborhoods">Neighborhoods</a></li>
+            <li><a href="#activities">Activities</a></li>
+            <li><a href="#explore">Map</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <a href="#contact" class="nav-pill">Plan Your Trip</a>
+        <button class="ham" aria-label="Menu">☰</button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg" id="hero-parallax"></div>
+        <div class="hero-grad"></div>
+        <div class="hero-grain"></div>
+        <div class="hero-badge">
+            <span class="badge-dot"></span>
+            <span class="badge-text">New York City &nbsp;·&nbsp; <span id="live-time">—</span></span>
+        </div>
+        <div class="hero-content">
+            <p class="hero-eyebrow">40.7128° N, 74.0060° W &nbsp;·&nbsp; The Big Apple</p>
+            <h1 class="hero-h1">
+                <span class="line1">NEW</span>
+                <span class="line2 outline">YORK</span>
+            </h1>
+            <div class="hero-row">
+                <p class="hero-desc">Eight million stories in a city that never pauses. From the harbor to Central Park
+                    — discover the iconic, the hidden, and everything between.</p>
+                <div class="hero-ctas">
+                    <a href="#landmarks" class="btn-y">Start Exploring</a>
+                    <a href="#explore" class="btn-outline">View Map</a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <div class="scroll-line"></div>
+            <span class="scroll-label">Scroll</span>
+        </div>
+    </section>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        const cursorRing = document.getElementById('cursor-ring');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorRing.style.left = e.clientX + 'px';
+            cursorRing.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mousedown', () => {
+            document.body.classList.add('clicking');
+        });
+
+        document.addEventListener('mouseup', () => {
+            document.body.classList.remove('clicking');
+        });
+
+        const hoverElements = document.querySelectorAll('a, button');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+
+        // Live Time
+        function updateTime() {
+            const now = new Date();
+            const options = { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', hour12: true };
+            const timeString = now.toLocaleTimeString('en-US', options);
+            document.getElementById('live-time').textContent = timeString;
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Nav Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Parallax Effect
+        window.addEventListener('scroll', () => {
+            const parallax = document.getElementById('hero-parallax');
+            const scrolled = window.pageYOffset;
+            parallax.style.transform = `scale(1.08) translateY(${scrolled * 0.5}px)`;
+        });
+    </script>
+</body>
+
+</html>

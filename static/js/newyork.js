@@ -1,255 +1,407 @@
-// Initialize AOS
-AOS.init({
-    duration: 1000,
-    once: true
-});
-
-// Navbar scroll effect
-window.addEventListener('scroll', function() {
-    if (window.scrollY > 50) {
-        document.querySelector('.navbar').classList.add('navbar-scrolled');
-    } else {
-        document.querySelector('.navbar').classList.remove('navbar-scrolled');
-    }
-});
-
-// Landmark data
-const landmarks = [
-    {
-        title: "Statue of Liberty",
-        description: "The Statue of Liberty, a colossal neoclassical sculpture on Liberty Island in New York Harbor, was a gift from the people of France to the United States.",
-        subtitle: "Symbol of Freedom and Democracy",
-        image: "https://i.postimg.cc/0jDpKtxn/Statue-of-Liberty.jpg",
-        position: [40.6892, -74.0445],
-        facts: [
-            { icon: "fas fa-ruler-vertical", text: "Height: 151 feet (46 meters)" },
-            { icon: "far fa-calendar-alt", text: "Dedicated: October 28, 1886" },
-            { icon: "fas fa-users", text: "Annual Visitors: 4.5 million" },
-            { icon: "fas fa-flag", text: "Gift from France to the USA" }
-        ],
-        visitorInfo: [
-            { icon: "fas fa-ship", text: "Ferry required for access" },
-            { icon: "fas fa-ticket-alt", text: "Crown access requires reservation" },
-            { icon: "fas fa-camera", text: "Panoramic views of NYC skyline" }
-        ]
-    },
-    {
-        title: "Empire State Building",
-        description: "The Empire State Building is a 102-story Art Deco skyscraper in Midtown Manhattan. It was the world's tallest building for nearly 40 years.",
-        subtitle: "Iconic Art Deco Skyscraper",
-        image: "https://i.postimg.cc/MZC5ZBxt/Empire-State-Building.jpg",
-        position: [40.7484, -73.9857],
-        facts: [
-            { icon: "fas fa-ruler-vertical", text: "Height: 1,454 feet (443.2 meters)" },
-            { icon: "far fa-calendar-alt", text: "Completed: 1931" },
-            { icon: "fas fa-users", text: "Annual Visitors: 4 million" },
-            { icon: "fas fa-award", text: "National Historic Landmark" }
-        ],
-        visitorInfo: [
-            { icon: "far fa-clock", text: "Open daily: 8 AM - 2 AM" },
-            { icon: "fas fa-binoculars", text: "86th and 102nd floor observatories" },
-            { icon: "fas fa-camera", text: "360-degree views of NYC" }
-        ]
-    },
-    {
-        title: "Central Park",
-        description: "Central Park is an urban park in New York City located between the Upper West and Upper East Sides of Manhattan. It is the most visited urban park in the United States.",
-        subtitle: "Urban Oasis in Manhattan",
-        image: "https://i.postimg.cc/65mrPNPg/Central-Park.jpg",
-        position: [40.7829, -73.9654],
-        facts: [
-            { icon: "fas fa-tree", text: "Size: 843 acres (341 hectares)" },
-            { icon: "far fa-calendar-alt", text: "Established: 1857" },
-            { icon: "fas fa-award", text: "National Historic Landmark" },
-            { icon: "fas fa-theater-masks", text: "Home to many cultural events" }
-        ],
-        visitorInfo: [
-            { icon: "fas fa-water", text: "Boating on The Lake" },
-            { icon: "fas fa-landmark", text: "Metropolitan Museum of Art" },
-            { icon: "fas fa-paw", text: "Central Park Zoo" },
-            { icon: "fas fa-theater-masks", text: "Delacorte Theater (Shakespeare in the Park)" }
-        ]
-    }
-];
-
-// Initialize map
-const map = L.map('map').setView([40.7128, -74.0060], 12);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-
-// Add markers and populate landmark list
-const landmarkList = document.getElementById('landmarkList');
-landmarks.forEach((landmark, index) => {
-    // Add marker
-    const marker = L.marker(landmark.position).addTo(map);
-    marker.bindPopup(`<b>${landmark.title}</b><br>${landmark.description}`);
-
-    // Add to landmark list
-    const listItem = document.createElement('li');
-    listItem.className = 'list-group-item';
-    listItem.innerHTML = `
-        <h6>${landmark.title}</h6>
-        <p class="mb-1">${landmark.description}</p>
-        <button class="btn btn-sm btn-outline-primary me-2" onclick="focusLandmark(${index})">Show on Map</button>
-        <button class="btn btn-sm btn-custom" data-bs-toggle="modal" data-bs-target="#landmarkModal" onclick="showLandmarkDetails(${index})">Learn More</button>
-    `;
-    landmarkList.appendChild(listItem);
-});
-
-function focusLandmark(index) {
-    const landmark = landmarks[index];
-    map.setView(landmark.position, 15);
+function updateTime() {
+    const now = new Date();
+    const options = { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', hour12: true };
+    const timeString = now.toLocaleTimeString('en-US', options);
+    document.getElementById('liveTime').textContent = timeString;
 }
+updateTime();
+setInterval(updateTime, 1000);
 
-function showLandmarkDetails(index) {
-    const landmark = landmarks[index];
-    document.getElementById('modalLandmarkTitle').textContent = landmark.title;
-    document.getElementById('modalLandmarkImage').src = landmark.image;
-    document.getElementById('modalLandmarkImage').alt = landmark.title;
-    document.getElementById('modalLandmarkSubtitle').textContent = landmark.subtitle;
-    document.getElementById('modalLandmarkDescription').textContent = landmark.description;
+const nav = document.getElementById('mainNav');
+const toggle = document.getElementById('navToggle');
+const mobileNav = document.getElementById('mobileNav');
 
-    const factsList = document.getElementById('modalLandmarkFacts');
-    factsList.innerHTML = '';
-    landmark.facts.forEach(fact => {
-        const li = document.createElement('li');
-        li.innerHTML = `<i class="${fact.icon} me-2 text-primary"></i> ${fact.text}`;
-        factsList.appendChild(li);
+window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+window.addEventListener('scroll', () => {
+    const heroVideo = document.getElementById('heroVideo');
+    if (heroVideo) {
+        const scrolled = window.pageYOffset;
+        heroVideo.style.transform = `scale(1.08) translateY(${scrolled * 0.5}px)`;
+    }
+}, { passive: true });
+
+toggle.addEventListener('click', () => {
+    const open = toggle.classList.toggle('open');
+    mobileNav.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+});
+
+document.querySelectorAll('.nav__mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+        toggle.classList.remove('open');
+        mobileNav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', false);
     });
+});
 
-    const visitorInfoList = document.getElementById('modalLandmarkVisitorInfo');
-    visitorInfoList.innerHTML = '';
-    landmark.visitorInfo.forEach(info => {
-        const li = document.createElement('li');
-        li.innerHTML = `<i class="${info.icon} me-2 text-primary"></i> ${info.text}`;
-        visitorInfoList.appendChild(li);
-    });
-}
-
-// Weather Widget
-async function fetchWeather() {
-    const apiKey = 'e597f0454b011ac1ad8a410141ca2ff6';
-    const city = 'New York';
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        displayWeather(data);
-    } catch (error) {
-        console.error('Error fetching weather data:', error);
-    }
-}
-
-function displayWeather(data) {
-    const weatherWidget = document.getElementById('weather-widget');
-    const temp = Math.round(data.main.temp);
-    const description = data.weather[0].description;
-    const icon = data.weather[0].icon;
-
-    weatherWidget.innerHTML = `
-        <h3 class="mb-3">Current Weather in New York</h3>
-        <img src="http://openweathermap.org/img/wn/${icon}@2x.png" alt="${description}">
-        <p class="h2 mb-0">${temp}°C</p>
-        <p>${description}</p>
-        <p>Humidity: ${data.main.humidity}%</p>
-        <p>Wind Speed: ${data.wind.speed} m/s</p>
-    `;
-}
-
-// Fetch weather data on page load
-fetchWeather();
-
-// Visitor Statistics Chart
-function createVisitorChart() {
-    const ctx = document.getElementById('visitorStats').getContext('2d');
-    const chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [{
-                label: 'Monthly Visitors (in millions)',
-                data: [3.2, 3.5, 4.1, 4.8, 5.5, 6.2, 6.8, 6.5, 5.9, 5.2, 4.5, 3.8],
-                backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Visitors (millions)'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Month'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: 'New York City Monthly Visitor Statistics',
-                    font: {
-                        size: 18
-                    }
-                }
-            }
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
         }
     });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+const landmarkData = [
+    {
+        key: 'liberty',
+        title: 'Statue of Liberty',
+        location: 'Liberty Island',
+        desc: 'A colossal neoclassical sculpture on Liberty Island — a gift from France dedicated on October 28, 1886. Now an enduring global symbol of freedom and the American dream.',
+        facts: [
+            { icon: 'fa-ruler-vertical', label: 'Height', value: '151 ft (46 m)' },
+            { icon: 'fa-calendar-alt', label: 'Dedicated', value: 'October 28, 1886' },
+            { icon: 'fa-users', label: 'Annual Visitors', value: '4.5 Million' },
+        ],
+        img: 'https://images.unsplash.com/photo-1485738422979-f5c462d49f74?w=1200&q=80',
+    },
+    {
+        key: 'empire',
+        title: 'Empire State Building',
+        location: 'Midtown Manhattan',
+        desc: "Standing at 1,454 feet, the Empire State Building remained the world's tallest building for 40 years. Its 86th-floor observatory offers unparalleled 360° views across five states.",
+        facts: [
+            { icon: 'fa-ruler-vertical', label: 'Height', value: '1,454 ft (443 m)' },
+            { icon: 'fa-calendar-alt', label: 'Completed', value: 'April 11, 1931' },
+            { icon: 'fa-users', label: 'Annual Visitors', value: '4 Million' },
+        ],
+        img: 'https://images.unsplash.com/photo-1555109307-f7d9da25c244?w=1200&q=80',
+    },
+    {
+        key: 'centralpark',
+        title: 'Central Park',
+        location: 'Upper Manhattan',
+        desc: '843 acres of meticulously designed urban parkland in the heart of Manhattan. Home to 50 fountains, 36 bridges, over 9,000 benches, and 500,000 trees.',
+        facts: [
+            { icon: 'fa-expand-arrows-alt', label: 'Area', value: '843 acres' },
+            { icon: 'fa-calendar-alt', label: 'Established', value: '1858' },
+            { icon: 'fa-users', label: 'Annual Visitors', value: '42 Million' },
+        ],
+        img: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=1200&q=80',
+    },
+];
+
+let currentSlide = 0;
+const track = document.getElementById('carouselTrack');
+const dots = document.querySelectorAll('.carousel__dot');
+
+function goToSlide(index) {
+    currentSlide = (index + landmarkData.length) % landmarkData.length;
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+    dots.forEach((d, i) => {
+        d.classList.toggle('active', i === currentSlide);
+        d.setAttribute('aria-selected', i === currentSlide);
+    });
+
+    const data = landmarkData[currentSlide];
+    document.getElementById('landmarkTitle').textContent = data.title;
+    document.getElementById('landmarkDesc').textContent = data.desc;
+
+    document.getElementById('landmarkFacts').innerHTML = data.facts.map(f => `
+    <li class="landmark-fact">
+      <div class="landmark-fact__icon"><i class="fas ${f.icon}" aria-hidden="true"></i></div>
+      <div>
+        <p class="landmark-fact__label">${f.label}</p>
+        <p class="landmark-fact__value">${f.value}</p>
+      </div>
+    </li>
+  `).join('');
+
+    document.getElementById('landmarkBookBtn')
+        .setAttribute('onclick', `openModal('${data.key}')`);
 }
 
-// Create visitor chart on page load
-createVisitorChart();
+document.getElementById('carouselNext').addEventListener('click', () => goToSlide(currentSlide + 1));
+document.getElementById('carouselPrev').addEventListener('click', () => goToSlide(currentSlide - 1));
+dots.forEach(dot => dot.addEventListener('click', () => goToSlide(+dot.dataset.slide)));
 
-// Smooth scrolling for navigation links
+let autoSlide = setInterval(() => goToSlide(currentSlide + 1), 5000);
+
+document.querySelector('.carousel').addEventListener('mouseenter', () => clearInterval(autoSlide));
+document.querySelector('.carousel').addEventListener('mouseleave', () => {
+    autoSlide = setInterval(() => goToSlide(currentSlide + 1), 5000);
+});
+
+document.querySelector('.carousel').addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
+    if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
+});
+
+const nyMarkers = [
+    { name: 'Statue of Liberty', area: 'Liberty Island', lat: 40.6892, lng: -74.0445 },
+    { name: 'Empire State Building', area: 'Midtown Manhattan', lat: 40.7484, lng: -73.9967 },
+    { name: 'Central Park', area: 'Upper Manhattan', lat: 40.7851, lng: -73.9683 },
+    { name: 'Times Square', area: 'Midtown', lat: 40.7580, lng: -73.9855 },
+    { name: 'Brooklyn Bridge', area: 'Lower Manhattan', lat: 40.7061, lng: -73.9969 },
+    { name: 'Metropolitan Museum', area: 'Upper East Side', lat: 40.7794, lng: -73.9632 },
+    { name: 'One World Trade Center', area: 'Lower Manhattan', lat: 40.7127, lng: -74.0134 },
+    { name: 'High Line Park', area: 'Chelsea', lat: 40.7479, lng: -74.0048 },
+];
+
+const map = L.map('map', {
+    center: [40.7484, -73.9967],
+    zoom: 12,
+    zoomControl: true,
+});
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 20,
+}).addTo(map);
+
+const goldIcon = L.divIcon({
+    className: '',
+    html: `<div style="
+    width:32px;height:32px;border-radius:50% 50% 50% 0;
+    background:#F7C325;border:2px solid #D4A615;
+    transform:rotate(-45deg);
+    box-shadow:0 4px 12px rgba(247,195,37,0.5);
+  "></div>`,
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -36],
+});
+
+nyMarkers.forEach(m => {
+    L.marker([m.lat, m.lng], { icon: goldIcon })
+        .addTo(map)
+        .bindPopup(`<strong>${m.name}</strong><span>${m.area}</span>`);
+});
+
+const list = document.getElementById('landmarkList');
+nyMarkers.forEach((m, i) => {
+    const li = document.createElement('li');
+    li.className = 'map-item';
+    li.setAttribute('role', 'listitem');
+    li.innerHTML = `
+    <div class="map-item__num">${i + 1}</div>
+    <div>
+      <p class="map-item__name">${m.name}</p>
+      <p class="map-item__area">${m.area}</p>
+    </div>
+    <i class="fas fa-chevron-right map-item__arrow" aria-hidden="true"></i>
+  `;
+    li.addEventListener('click', () => {
+        map.setView([m.lat, m.lng], 15, { animate: true, duration: 1 });
+    });
+    list.appendChild(li);
+});
+
+function renderWeather() {
+    document.getElementById('weatherWidget').innerHTML = `
+    <div class="weather-main">
+      <div class="weather-icon-wrap">
+        <i class="fas fa-cloud-sun" aria-hidden="true"></i>
+      </div>
+      <div class="weather-temp">68°<sup style="font-size:0.45em;font-weight:400;vertical-align:super;">F</sup></div>
+      <div class="weather-desc">Partly Cloudy</div>
+      <div class="weather-city">
+        <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+        New York City, NY
+      </div>
+    </div>
+    <div class="weather-details">
+      <div class="weather-detail">
+        <div class="weather-detail__icon"><i class="fas fa-tint" aria-hidden="true"></i></div>
+        <p class="weather-detail__label">Humidity</p>
+        <p class="weather-detail__value">62%</p>
+      </div>
+      <div class="weather-detail">
+        <div class="weather-detail__icon"><i class="fas fa-wind" aria-hidden="true"></i></div>
+        <p class="weather-detail__label">Wind</p>
+        <p class="weather-detail__value">12 mph</p>
+      </div>
+      <div class="weather-detail">
+        <div class="weather-detail__icon"><i class="fas fa-eye" aria-hidden="true"></i></div>
+        <p class="weather-detail__label">Visibility</p>
+        <p class="weather-detail__value">10 mi</p>
+      </div>
+      <div class="weather-detail">
+        <div class="weather-detail__icon"><i class="fas fa-thermometer-half" aria-hidden="true"></i></div>
+        <p class="weather-detail__label">Feels Like</p>
+        <p class="weather-detail__value">65°F</p>
+      </div>
+      <div class="weather-detail">
+        <div class="weather-detail__icon"><i class="fas fa-sun" aria-hidden="true"></i></div>
+        <p class="weather-detail__label">UV Index</p>
+        <p class="weather-detail__value">Moderate 4</p>
+      </div>
+      <div class="weather-detail">
+        <div class="weather-detail__icon"><i class="fas fa-cloud-rain" aria-hidden="true"></i></div>
+        <p class="weather-detail__label">Rain Chance</p>
+        <p class="weather-detail__value">15%</p>
+      </div>
+    </div>
+  `;
+}
+
+renderWeather();
+
+const ctx = document.getElementById('visitorStats').getContext('2d');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [
+            {
+                label: 'International',
+                data: [2.1, 1.8, 2.9, 3.5, 4.2, 5.8, 6.5, 6.2, 5.1, 4.3, 3.0, 2.5],
+                backgroundColor: 'rgba(247,195,37,0.8)',
+                borderColor: '#F7C325',
+                borderWidth: 0,
+                borderRadius: 6,
+                borderSkipped: false,
+            },
+            {
+                label: 'Domestic',
+                data: [3.2, 2.8, 3.8, 4.6, 5.1, 6.4, 7.2, 7.0, 5.9, 5.2, 4.0, 3.5],
+                backgroundColor: 'rgba(79,142,247,0.7)',
+                borderColor: '#4F8EF7',
+                borderWidth: 0,
+                borderRadius: 6,
+                borderSkipped: false,
+            },
+        ],
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: '#16161F',
+                borderColor: 'rgba(255,255,255,0.06)',
+                borderWidth: 1,
+                titleColor: '#F4EFE6',
+                bodyColor: 'rgba(244,239,230,0.55)',
+                padding: 12,
+                callbacks: {
+                    label: ctx => ` ${ctx.dataset.label}: ${ctx.raw}M visitors`,
+                },
+            },
+        },
+        scales: {
+            x: {
+                grid: { color: 'rgba(255,255,255,0.04)' },
+                ticks: { color: 'rgba(244,239,230,0.4)', font: { size: 12 } },
+            },
+            y: {
+                grid: { color: 'rgba(255,255,255,0.04)' },
+                ticks: {
+                    color: 'rgba(244,239,230,0.4)',
+                    font: { size: 12 },
+                    callback: v => v + 'M',
+                },
+                beginAtZero: true,
+            },
+        },
+    },
+});
+
+function animateCounter(el) {
+    const target = parseInt(el.dataset.count, 10);
+    const suffix = el.dataset.suffix || '';
+    const duration = 2000;
+    const start = performance.now();
+
+    function step(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 4);
+        el.textContent = Math.floor(ease * target) + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+}
+
+const counterObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            counterObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stat-card__num').forEach(el => counterObserver.observe(el));
+
+function openModal(key) {
+    const data = landmarkData.find(d => d.key === key);
+    if (!data) return;
+
+    document.getElementById('modalImg').src = data.img;
+    document.getElementById('modalImg').alt = data.title;
+    document.getElementById('modalEyebrow').textContent = data.location;
+    document.getElementById('modalTitle').textContent = data.title;
+    document.getElementById('modalDesc').textContent = data.desc;
+    document.getElementById('modalFacts').innerHTML = data.facts.map(f => `
+    <div class="landmark-fact">
+      <div class="landmark-fact__icon"><i class="fas ${f.icon}" aria-hidden="true"></i></div>
+      <div>
+        <p class="landmark-fact__label">${f.label}</p>
+        <p class="landmark-fact__value">${f.value}</p>
+      </div>
+    </div>
+  `).join('');
+
+    const overlay = document.getElementById('landmarkModal');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    overlay.querySelector('.modal__close').focus();
+}
+
+function closeModal() {
+    document.getElementById('landmarkModal').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+document.getElementById('landmarkModal').addEventListener('click', function (e) {
+    if (e.target === this) closeModal();
+});
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+});
+
+let toastTimer;
+
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    toast.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('visible'), 4000);
+}
+
+document.getElementById('contactForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    showToast("Message sent! We'll be in touch within 24 hours.");
+    this.reset();
+});
+
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     });
 });
 
-// Form submission
-document.querySelector('form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Here you would typically send the form data to a server
-    // For demonstration purposes, we'll just log it to the console
-    console.log('Form submitted');
-    console.log('Name:', document.getElementById('name').value);
-    console.log('Email:', document.getElementById('email').value);
-    console.log('Message:', document.getElementById('message').value);
-
-    // Clear form fields
-    document.getElementById('name').value = '';
-    document.getElementById('email').value = '';
-    document.getElementById('message').value = '';
-
-    // Show a success message (you might want to use a modal or toast for this)
-    alert('Thank you for your message. We will get back to you soon!');
-});
-
-// Function to book a tour (placeholder)
-function bookTour() {
-    alert('Thank you for your interest! Our booking system is currently under maintenance. Please check back later or contact us directly to book a tour.');
-}
-
-// Initialize all tooltips
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
+window.addEventListener('load', () => {
+    document.querySelectorAll('video').forEach(video => {
+        video.play().catch(() => {
+            console.log('Video autoplay blocked');
+        });
+    });
 });
